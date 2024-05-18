@@ -4,7 +4,7 @@ use std::{error::Error, fmt::Display};
 pub enum Errors {
     LessThanOneEntropyError,
     CannotEncodeNegativeIntegersBase36EncodeError,
-    ExceededMaximumLengthGenerateCuidError
+    ExceededMaximumLengthGenerateCuidError,
 }
 
 impl Error for Errors {}
