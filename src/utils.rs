@@ -4,7 +4,9 @@ use num_integer;
 use sha2::{self};
 use sha3::{self, Digest as SHA3Digest};
 use std;
+use regex;
 
+/// Available SHAs for use.
 pub enum SHAs {
     /// Improved security and randomness
     SHA3_512,
@@ -12,6 +14,7 @@ pub enum SHAs {
     SHA2_512,
 }
 
+/// Default counter function
 pub fn create_counter(mut count: isize) -> CounterFunctionType {
     return Box::new(move || {
         count += 1;
@@ -19,11 +22,14 @@ pub fn create_counter(mut count: isize) -> CounterFunctionType {
     });
 }
 
+// Types for help defining a function return types (I wanted to use function pointers but that doesn't support closures)
 pub type RandomFunctionType = Box<dyn FnMut() -> f64>;
+pub type CreateCounterFunctionType = Box<dyn Fn(isize) -> CounterFunctionType>;
 pub type CounterFunctionType = Box<dyn FnMut() -> isize>;
 pub type FingerPrintFunctionType =
     Box<dyn Fn(&mut RandomFunctionType, Option<String>, &SHAs) -> String>;
 
+/// Stupidities
 const BIG_LENGTH: usize = 32;
 const SHENANIGANS: [char; 36] = [
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -35,10 +41,11 @@ const SHENANIGANS_LOWERCASE: [char; 26] = [
     't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
+/// Creates a machine-specific fingerprint
 pub fn create_fingerprint(
     random_number_generator: &mut RandomFunctionType,
     fingerprint_data: Option<String>,
-    sha_algo: SHAs,
+    sha_algo: &SHAs,
 ) -> String {
     let new_fingerprint_data: String;
     if fingerprint_data.is_none() {
@@ -60,6 +67,7 @@ pub fn create_fingerprint(
     return create_hash(Some(fingerprint), &sha_algo)[0..BIG_LENGTH].to_string();
 }
 
+/// Creates hash based on data and hash it with [`SHAs`] options
 pub fn create_hash(data: Option<String>, sha_algo: &SHAs) -> String {
     let actual_data = data.unwrap_or("".to_string());
     let hashed_value = match sha_algo {
@@ -78,6 +86,7 @@ pub fn create_hash(data: Option<String>, sha_algo: &SHAs) -> String {
     return base36_encode(hashed_int);
 }
 
+/// Creates entropy by length
 pub fn create_entropy(
     random_number_generator: &mut RandomFunctionType,
     length: Option<usize>,
@@ -96,6 +105,7 @@ pub fn create_entropy(
     return Ok(entropy);
 }
 
+/// Base36 Encoder
 pub fn base36_encode(mut number: num_bigint::BigUint) -> String {
     let mut encoded_string = String::new();
     let mut modular: num_bigint::BigUint;
@@ -110,7 +120,18 @@ pub fn base36_encode(mut number: num_bigint::BigUint) -> String {
     return encoded_string;
 }
 
+/// Randomly selects a letter from [`RandomFunctionType`] value
 pub fn create_letter(random_number_generator: &mut RandomFunctionType) -> char {
     return SHENANIGANS_LOWERCASE
         [(random_number_generator() * (SHENANIGANS_LOWERCASE.len() as f64)) as usize];
+}
+
+/// Checks if this is valid [`crate::Cuid`]
+pub fn is_cuid(id: String, min_length: Option<usize>, max_length: Option<usize>) -> bool {
+    let length = id.len();
+    let re = "/^[0-9a-z]+$/";
+    if length >= min_length.unwrap_or(2) && length <= max_length.unwrap_or(crate::generator::MAXIMUM_LENGTH) {
+        return regex::Regex::new(re).unwrap().is_match(&id)
+    }
+    return false;
 }

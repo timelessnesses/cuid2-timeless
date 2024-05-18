@@ -5,8 +5,12 @@ use crate::{
     utils::{self, SHAs},
 };
 
+/// ~22k hosts before 50% chance of initial counter collision
+/// with a remaining counter range of 9.0e+15 in JavaScript.
 pub const INITIAL_COUNT_MAX: usize = 476782367;
+/// Default length when called [`Cuid::default()`]
 pub const DEFAULT_LENGTH: usize = 24;
+/// Maximum length for [`Cuid::generate()`]
 pub const MAXIMUM_LENGTH: usize = 98;
 
 pub struct Cuid {
@@ -23,7 +27,7 @@ impl Default for Cuid {
         let randomed: f64 = randomity.gen();
         let mut wrapper_rand: Box<dyn FnMut() -> f64> = Box::new(move || randomity.gen());
         Cuid {
-            fingerprint: utils::create_fingerprint(&mut wrapper_rand, None, utils::SHAs::SHA3_512),
+            fingerprint: utils::create_fingerprint(&mut wrapper_rand, None, &utils::SHAs::SHA3_512),
             random: wrapper_rand,
             counter: Box::new(utils::create_counter(
                 (randomed * INITIAL_COUNT_MAX as f64) as isize,
@@ -38,15 +42,17 @@ impl Cuid {
     #[inline]
     pub fn new(
         mut random: utils::RandomFunctionType,
-        counter: utils::CounterFunctionType,
+        counter: utils::CreateCounterFunctionType,
         length: usize,
         fingerprint: utils::FingerPrintFunctionType,
         sha_algo: SHAs,
     ) -> Self {
+        let randomed = random();
+        let created = counter((randomed * INITIAL_COUNT_MAX as f64) as isize);
         Cuid {
             fingerprint: fingerprint(&mut random, None, &sha_algo),
             random,
-            counter,
+            counter: created,
             length,
             sha_algo,
         }
@@ -80,7 +86,7 @@ impl Cuid {
         let hash_input = base36_time + &salt + &base36_count + &self.fingerprint;
 
         return Ok(first_letter.to_string()
-            + &utils::create_hash(Some(hash_input), &self.sha_algo)[1..actual_length]);
+            + &utils::create_hash(Some(hash_input), &self.sha_algo)[0..actual_length]);
     }
 }
 
