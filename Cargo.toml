@@ -1,0 +1,13 @@
+[package]
+name = "cuid2-timeless"
+version = "0.1.0"
+edition = "2021"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+gethostname = "0.4.3"
+hex = "0.4.3"
+num-integer = "0.1.46"
+rand = { version = "0.8.5", features = ["getrandom"]}
+sha2 = "0.10.8"
+sha3 = "0.10.8"
