@@ -2,7 +2,7 @@ use rand::{self, Rng};
 
 use crate::{
     errors,
-    utils::{self, SHAs},
+    utils,
 };
 
 /// ~22k hosts before 50% chance of initial counter collision
@@ -18,7 +18,6 @@ pub struct Cuid {
     counter: utils::CounterFunctionType,
     length: usize,
     fingerprint: String,
-    sha_algo: SHAs,
 }
 
 impl Default for Cuid {
@@ -27,13 +26,12 @@ impl Default for Cuid {
         let randomed: f64 = randomity.gen();
         let mut wrapper_rand: Box<dyn FnMut() -> f64> = Box::new(move || randomity.gen());
         Cuid {
-            fingerprint: utils::create_fingerprint(&mut wrapper_rand, None, &utils::SHAs::SHA3_512),
+            fingerprint: utils::create_fingerprint(&mut wrapper_rand, None),
             random: wrapper_rand,
             counter: Box::new(utils::create_counter(
                 (randomed * INITIAL_COUNT_MAX as f64) as isize,
             )),
             length: DEFAULT_LENGTH,
-            sha_algo: utils::SHAs::SHA3_512,
         }
     }
 }
@@ -45,16 +43,14 @@ impl Cuid {
         counter: utils::CreateCounterFunctionType,
         length: usize,
         fingerprint: utils::FingerPrintFunctionType,
-        sha_algo: SHAs,
     ) -> Self {
         let randomed = random();
         let created = counter((randomed * INITIAL_COUNT_MAX as f64) as isize);
         Cuid {
-            fingerprint: fingerprint(&mut random, None, &sha_algo),
+            fingerprint: fingerprint(&mut random, None),
             random,
             counter: created,
             length,
-            sha_algo,
         }
     }
     #[inline]
@@ -86,7 +82,7 @@ impl Cuid {
         let hash_input = base36_time + &salt + &base36_count + &self.fingerprint;
 
         return Ok(first_letter.to_string()
-            + &utils::create_hash(Some(hash_input), &self.sha_algo)[0..actual_length]);
+            + &utils::create_hash(Some(hash_input))[0..actual_length]);
     }
 }
 

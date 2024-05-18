@@ -1,18 +1,8 @@
 use gethostname::gethostname;
 use num_bigint::{self, BigUint};
 use num_integer;
-use sha2::{self};
-use sha3::{self, Digest as SHA3Digest};
 use std;
 use regex;
-
-/// Available SHAs for use.
-pub enum SHAs {
-    /// Improved security and randomness
-    SHA3_512,
-    /// Less secure, beware!
-    SHA2_512,
-}
 
 /// Default counter function
 pub fn create_counter(mut count: isize) -> CounterFunctionType {
@@ -27,7 +17,7 @@ pub type RandomFunctionType = Box<dyn FnMut() -> f64>;
 pub type CreateCounterFunctionType = Box<dyn Fn(isize) -> CounterFunctionType>;
 pub type CounterFunctionType = Box<dyn FnMut() -> isize>;
 pub type FingerPrintFunctionType =
-    Box<dyn Fn(&mut RandomFunctionType, Option<String>, &SHAs) -> String>;
+    Box<dyn Fn(&mut RandomFunctionType, Option<String>) -> String>;
 
 /// Stupidities
 const BIG_LENGTH: usize = 32;
@@ -45,7 +35,6 @@ const SHENANIGANS_LOWERCASE: [char; 26] = [
 pub fn create_fingerprint(
     random_number_generator: &mut RandomFunctionType,
     fingerprint_data: Option<String>,
-    sha_algo: &SHAs,
 ) -> String {
     let new_fingerprint_data: String;
     if fingerprint_data.is_none() {
@@ -64,24 +53,25 @@ pub fn create_fingerprint(
         + create_entropy(random_number_generator, Some(BIG_LENGTH))
             .unwrap()
             .as_str();
-    return create_hash(Some(fingerprint), &sha_algo)[0..BIG_LENGTH].to_string();
+    return create_hash(Some(fingerprint))[0..BIG_LENGTH].to_string();
 }
 
 /// Creates hash based on data and hash it with [`SHAs`] options
-pub fn create_hash(data: Option<String>, sha_algo: &SHAs) -> String {
+pub fn create_hash(data: Option<String>) -> String {
     let actual_data = data.unwrap_or("".to_string());
-    let hashed_value = match sha_algo {
-        SHAs::SHA2_512 => {
-            let mut hasher = sha2::Sha512::new();
-            hasher.update(actual_data);
-            hasher.finalize()
-        }
-        SHAs::SHA3_512 => {
-            let mut hasher = sha3::Sha3_512::new();
-            hasher.update(actual_data);
-            hasher.finalize()
-        }
-    };
+    
+    #[cfg(feature="sha2")]
+    use sha2::{self, Digest};
+    #[cfg(feature="sha2")]
+    let mut hasher = sha2::Sha_512::new();
+    #[cfg(feature="sha3")]
+    use sha3::{self, Digest};
+    #[cfg(feature="sha3")]
+    let mut hasher = sha3::Sha3_512::new();
+
+    hasher.update(actual_data);
+    let hashed_value = hasher.finalize();
+
     let hashed_int = num_bigint::BigUint::from_bytes_be(&hashed_value);
     return base36_encode(hashed_int);
 }
