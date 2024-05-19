@@ -55,5 +55,5 @@ println!("{}", cuid2_timeless::is_cuid("f9ovgvsnly7h6khwt4nx08kom".to_string(), 
 
 - `regex` is a feature for either remove or add `regex` crate to the module. Turning this off will remove the `is_cuid` function (enabled by default)
 - `random` is a feature for either remove or add `rand` crate to the module. Turning this off will remove `Default` trait from `Cuid` (enabled by default)
-- `sha2` is a feature for either remove or add `sha2` crate to the module. Turning this off will remove SHA2 hashing algorithm, but turning this feature on will uses `sha3` for hashing (cannot enabled with `sha3` present, compiling will error if `sha2` and `sha3` is enabled, not enabled by default)
+- `sha2` is a feature for either remove or add `sha2` crate to the module. Turning this off will remove SHA2 hashing algorithm, but turning this feature on will uses `sha2` for hashing (cannot enabled with `sha3` present, compiling will error if `sha2` and `sha3` is enabled, not enabled by default)
 - `sha3` is a feature for either remove or add `sha3` crate to the module. Turning this off will remove SHA3 hashing algorithm, but turning this feature on will uses `sha3` for hashing (cannot enabled with `sha2` present, compiling will error if `sha2` and `sha3` is enabled, enabled by default)

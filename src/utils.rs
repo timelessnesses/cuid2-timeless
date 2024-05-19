@@ -13,10 +13,13 @@ pub fn create_counter(mut count: isize) -> CounterFunctionType {
     });
 }
 
-// Types for help defining a function return types (I wanted to use function pointers but that doesn't support closures)
+/// Random function type
 pub type RandomFunctionType = Box<dyn FnMut() -> f64>;
+/// Create counter function type
 pub type CreateCounterFunctionType = Box<dyn Fn(isize) -> CounterFunctionType>;
+/// Counter function type
 pub type CounterFunctionType = Box<dyn FnMut() -> isize>;
+/// Fingerprint function type
 pub type FingerPrintFunctionType =
     Box<dyn Fn(&mut RandomFunctionType, Option<String>) -> String>;
 
