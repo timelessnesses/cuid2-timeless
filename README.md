@@ -2,6 +2,10 @@
 
 An unstable, barely tested, probably giving wrong output and might panic out of nowhere CUID2 implementation in Rust. Built for learning more rust and I don't know how to test it.
 
+## Installation
+
+`cargo add cuid2_timeless` with feature flag either `sha2` or `sha3`
+
 ## Usage
 
 Either use the `cuid2_timeless::cuid_wrapper()` and call it again to get ID or get some customization with `cuid2_timeless::Cuid`
