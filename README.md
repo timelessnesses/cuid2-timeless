@@ -4,7 +4,7 @@ An unstable, barely tested, probably giving wrong output and might panic out of 
 
 ## Installation
 
-`cargo add cuid2_timeless` with feature flag either `sha2` or `sha3`
+`cargo add cuid2_timeless` with feature flag either `sha2` or `sha3` (default)
 
 ## Usage
 
