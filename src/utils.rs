@@ -56,7 +56,7 @@ pub fn create_fingerprint(
     return create_hash(Some(fingerprint))[0..BIG_LENGTH].to_string();
 }
 
-/// Creates hash based on data and hash it with [`SHAs`] options
+/// Creates hash based on data and hash it with SHA based on feature flag you specified
 pub fn create_hash(data: Option<String>) -> String {
     let actual_data = data.unwrap_or("".to_string());
     

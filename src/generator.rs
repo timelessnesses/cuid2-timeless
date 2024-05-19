@@ -13,6 +13,7 @@ pub const DEFAULT_LENGTH: usize = 24;
 /// Maximum length for [`Cuid::generate()`]
 pub const MAXIMUM_LENGTH: usize = 98;
 
+/// CUID2 implementation
 pub struct Cuid {
     random: utils::RandomFunctionType,
     counter: utils::CounterFunctionType,
@@ -38,6 +39,7 @@ impl Default for Cuid {
 
 impl Cuid {
     #[inline]
+    /// Initialize new [`Cuid`] instance without default configurations
     pub fn new(
         mut random: utils::RandomFunctionType,
         counter: utils::CreateCounterFunctionType,
@@ -54,6 +56,7 @@ impl Cuid {
         }
     }
     #[inline]
+    /// Generate a CUID
     pub fn generate(&mut self, length: Option<usize>) -> Result<String, errors::Errors> {
         let actual_length = length.unwrap_or(self.length);
         if actual_length > MAXIMUM_LENGTH {
@@ -86,6 +89,7 @@ impl Cuid {
     }
 }
 
+/// A function wrapper for generating [`Cuid`] with default configurations
 pub fn cuid_wrapper() -> Box<dyn FnMut() -> Result<String, errors::Errors>> {
     let mut cuid = Cuid::default();
     return Box::new(move || cuid.generate(None));
