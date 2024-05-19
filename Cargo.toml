@@ -2,6 +2,7 @@
 name = "cuid2-timeless"
 version = "0.1.0"
 edition = "2021"
+description = "An unstable, barely tested, probably giving wrong output and might panic out of nowhere CUID2 implementation in Rust"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
