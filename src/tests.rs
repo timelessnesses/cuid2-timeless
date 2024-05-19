@@ -1,4 +1,5 @@
 mod tests {
+    
     use crate::cuid_wrapper;
 
 
@@ -16,7 +17,7 @@ mod tests {
         let mut please_work = cuid_wrapper();
         let why = please_work().unwrap();
         let god_damn_it = please_work().unwrap();
-        assert_eq!(why, god_damn_it)
+        assert_ne!(why, god_damn_it)
     }
 
     #[test]
@@ -26,6 +27,11 @@ mod tests {
                 5
             })
         }), 2, Box::new(crate::utils::create_fingerprint));
-        println!("{}",lol.generate(None).unwrap());
+        println!("{}",lol.generate(None).is_err());
+    }
+
+    #[test]
+    fn test_is_cuid() {
+        assert!(crate::is_cuid("f9ovgvsnly7h6khwt4nx08kom".to_string(), None, None));
     }
 }

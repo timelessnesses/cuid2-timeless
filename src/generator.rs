@@ -1,3 +1,4 @@
+#[cfg(feature = "random")]
 use rand::{self, Rng};
 
 use crate::{
@@ -21,6 +22,7 @@ pub struct Cuid {
     fingerprint: String,
 }
 
+#[cfg(feature = "random")]
 impl Default for Cuid {
     fn default() -> Self {
         let mut randomity = rand::thread_rng();
@@ -89,6 +91,7 @@ impl Cuid {
     }
 }
 
+#[cfg(feature = "random")]
 /// A function wrapper for generating [`Cuid`] with default configurations
 pub fn cuid_wrapper() -> Box<dyn FnMut() -> Result<String, errors::Errors>> {
     let mut cuid = Cuid::default();

@@ -2,6 +2,7 @@ use gethostname::gethostname;
 use num_bigint::{self, BigUint};
 use num_integer;
 use std;
+#[cfg(feature = "regex")]
 use regex;
 
 /// Default counter function
@@ -63,7 +64,7 @@ pub fn create_hash(data: Option<String>) -> String {
     #[cfg(feature="sha2")]
     use sha2::{self, Digest};
     #[cfg(feature="sha2")]
-    let mut hasher = sha2::Sha_512::new();
+    let mut hasher = sha2::Sha512::new();
     #[cfg(feature="sha3")]
     use sha3::{self, Digest};
     #[cfg(feature="sha3")]
@@ -116,10 +117,12 @@ pub fn create_letter(random_number_generator: &mut RandomFunctionType) -> char {
         [(random_number_generator() * (SHENANIGANS_LOWERCASE.len() as f64)) as usize];
 }
 
+#[cfg(feature = "regex")]
 /// Checks if this is valid [`crate::Cuid`]
 pub fn is_cuid(id: String, min_length: Option<usize>, max_length: Option<usize>) -> bool {
     let length = id.len();
-    let re = "/^[0-9a-z]+$/";
+    let re = r"^[0-9a-z]+$";
+    println!("{}, {}", length >= min_length.unwrap_or(2), length <= max_length.unwrap_or(crate::generator::MAXIMUM_LENGTH));
     if length >= min_length.unwrap_or(2) && length <= max_length.unwrap_or(crate::generator::MAXIMUM_LENGTH) {
         return regex::Regex::new(re).unwrap().is_match(&id)
     }

@@ -4,7 +4,7 @@ An unstable, barely tested, probably giving wrong output and might panic out of 
 
 ## Installation
 
-`cargo add cuid2_timeless` with feature flag either `sha2` or `sha3` (default)
+`cargo add cuid2_timeless --features sha3` (or you can use sha2 if you wanted to)
 
 ## Usage
 
@@ -48,5 +48,12 @@ or verify if it actually is `CUID`
 ```rust
 use cuid2_timeless;
 
-println!("{}", cuid2_timeless::is_cuid("f9ovgvsnly7h6khwt4nx08kom", None, None));
+println!("{}", cuid2_timeless::is_cuid("f9ovgvsnly7h6khwt4nx08kom".to_string(), None, None));
 ```
+
+## Features
+
+- `regex` is a feature for either remove or add `regex` crate to the module. Turning this off will remove the `is_cuid` function (enabled by default)
+- `random` is a feature for either remove or add `rand` crate to the module. Turning this off will remove `Default` trait from `Cuid` (enabled by default)
+- `sha2` is a feature for either remove or add `sha2` crate to the module. Turning this off will remove SHA2 hashing algorithm, but turning this feature on will uses `sha3` for hashing (cannot enabled with `sha3` present, compiling will error if `sha2` and `sha3` is enabled, not enabled by default)
+- `sha3` is a feature for either remove or add `sha3` crate to the module. Turning this off will remove SHA3 hashing algorithm, but turning this feature on will uses `sha3` for hashing (cannot enabled with `sha2` present, compiling will error if `sha2` and `sha3` is enabled, enabled by default)
