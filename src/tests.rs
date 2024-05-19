@@ -25,7 +25,7 @@ mod tests {
             Box::new(|| {
                 5
             })
-        }), 2, Box::new(crate::utils::create_fingerprint), crate::utils::SHAs::SHA2_512);
+        }), 2, Box::new(crate::utils::create_fingerprint));
         println!("{}",lol.generate(None).unwrap());
     }
 }

@@ -2,6 +2,7 @@
 name = "cuid2-timeless"
 version = "0.1.0"
 edition = "2021"
+description = "An unstable, barely tested, probably giving wrong output and might panic out of nowhere CUID2 implementation in Rust"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -11,5 +12,10 @@ num-bigint = "0.4.5"
 num-integer = "0.1.46"
 rand = { version = "0.8.5", features = ["getrandom"]}
 regex = "1.10.4"
-sha2 = "0.10.8"
-sha3 = "0.10.8"
+sha2 = { version = "0.10.8", optional = true}
+sha3 = { version = "0.10.8", optional = true}
+
+[features]
+sha2 = ["dep:sha2"]
+sha3 = ["dep:sha3"]
+default = ["sha3"]
