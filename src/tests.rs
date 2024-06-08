@@ -1,5 +1,7 @@
 mod tests {
     
+    use std::{collections::HashSet, sync::Mutex};
+    use rayon::prelude::*;
     use crate::cuid_wrapper;
 
 
@@ -21,6 +23,7 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
     fn test_custom_generator() {
         let mut lol = crate::Cuid::new(Box::new(|| {4.0}), Box::new(|_| {
             Box::new(|| {
@@ -33,5 +36,16 @@ mod tests {
     #[test]
     fn test_is_cuid() {
         assert!(crate::is_cuid("f9ovgvsnly7h6khwt4nx08kom".to_string(), None, None));
+    }
+
+    #[test]
+    fn test_large_ids() {
+        let mut thing = cuid_wrapper();
+        let a = (0..100_000).into_iter().map(|_| thing().unwrap()).collect::<Vec<String>>();
+        let saw = Mutex::new(HashSet::new());
+        assert!(a.par_iter().filter(|&id| {
+            let mut saw = saw.lock().unwrap();
+            saw.insert(id)
+        }).count() > 0);
     }
 }

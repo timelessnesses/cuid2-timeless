@@ -3,10 +3,10 @@ use std::{error::Error, fmt::Display};
 #[derive(Clone, Copy, Debug)]
 /// List of possible errors (probably)
 /// ```
-/// let will_error = cuid2_timeless::cuid_wrapper();
-/// match will_error {
+/// let mut will_error = cuid2_timeless::cuid_wrapper();
+/// match will_error() {
 ///     Ok(e) => {
-///         println!(e);
+///         println!("{}", e);
 ///     },
 ///     Err(e) => {
 ///         println!("oh no!");

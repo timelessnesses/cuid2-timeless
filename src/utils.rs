@@ -125,7 +125,6 @@ pub fn create_letter(random_number_generator: &mut RandomFunctionType) -> char {
 pub fn is_cuid(id: String, min_length: Option<usize>, max_length: Option<usize>) -> bool {
     let length = id.len();
     let re = r"^[0-9a-z]+$";
-    println!("{}, {}", length >= min_length.unwrap_or(2), length <= max_length.unwrap_or(crate::generator::MAXIMUM_LENGTH));
     if length >= min_length.unwrap_or(2) && length <= max_length.unwrap_or(crate::generator::MAXIMUM_LENGTH) {
         return regex::Regex::new(re).unwrap().is_match(&id)
     }
