@@ -7,7 +7,7 @@ An unstable, barely tested, probably giving wrong output and might panic out of 
 > |benchmark              |cuid2-timeless|cuid2 (cuid-rust)|
 > |-----------------------|--------------|-----------------|
 > |single cuid generation |53.180 µs     |2.8162 µs        |
-> |10,000 cuids generation|28.900 ms     |553.52 ms        |
+> |10,000 cuids generation|553.52 ms     |28.900 ms        |
 >
 > This library is for learning purposes. Please don't use this library in production! Use [cuid-rust](https://github.com/mplanchard/cuid-rust) instead!
 
