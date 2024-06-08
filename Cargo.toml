@@ -29,7 +29,7 @@ sha3 = ["dep:sha3"]
 random = ["dep:rand"]
 regex = ["dep:regex"]
 tests = ["sha3", "regex", "random", "dep:rayon"]
-default = ["random", "regex", "sha3", "tests"]
+default = ["random", "regex", "sha3"]
 
 [[bench]]
 name = "cuid2_timeless_benchmarkery"
