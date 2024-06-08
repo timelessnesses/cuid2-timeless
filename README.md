@@ -2,6 +2,15 @@
 
 An unstable, barely tested, probably giving wrong output and might panic out of nowhere CUID2 implementation in Rust. Built for learning more rust and I don't know how to test it.
 
+> [!CAUTION]
+> This library is slower than cuid-rust by a whole lot!
+> |benchmark              |cuid2-timeless|cuid2 (cuid-rust)|
+> |-----------------------|--------------|-----------------|
+> |single cuid generation |53.180 µs     |2.8162 µs        |
+> |10,000 cuids generation|28.900 ms     |553.52 ms        |
+>
+> This library is for learning purposes. Please don't use this library in production! Use [cuid-rust](https://github.com/mplanchard/cuid-rust) instead!
+
 ## Installation
 
 `cargo add cuid2_timeless --features sha3` (or you can use sha2 if you wanted to)

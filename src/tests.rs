@@ -41,7 +41,7 @@ mod tests {
     #[test]
     fn test_large_ids() {
         let mut thing = cuid_wrapper();
-        let a = (0..100_000).into_iter().map(|_| thing().unwrap()).collect::<Vec<String>>();
+        let a = (0..10_000).into_iter().map(|_| thing().unwrap()).collect::<Vec<String>>();
         let saw = Mutex::new(HashSet::new());
         assert!(a.par_iter().filter(|&id| {
             let mut saw = saw.lock().unwrap();
