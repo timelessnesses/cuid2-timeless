@@ -4,6 +4,7 @@ An unstable, barely tested, probably giving wrong output and might panic out of 
 
 > [!CAUTION]
 > This library is slower than cuid-rust by a whole lot!
+> this benchmark was ran with AMD Ryzen 7 7730U 8 Cores and 16 Logical Processors with 16 Gigabytes of RAM
 > |benchmark              |cuid2-timeless|cuid2 (cuid-rust)|
 > |-----------------------|--------------|-----------------|
 > |single cuid generation |53.180 µs     |2.8162 µs        |
