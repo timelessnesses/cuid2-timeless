@@ -20,7 +20,7 @@ An unstable, barely tested, probably giving wrong output and might panic out of 
 
 Either use the `cuid2_timeless::cuid_wrapper()` and call it again to get ID or get some customization with `cuid2_timeless::Cuid`
 
-``` rust
+```rust
 use cuid2_timeless;
 
 let mut cuid = cuid2_timeless::cuid_wrapper();
